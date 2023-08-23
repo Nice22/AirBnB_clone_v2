@@ -9,7 +9,7 @@ env.hosts = ["35.196.96.41", "3.234.218.189"]
 env.user = "ubuntu"
 env.key_filename = "/root/0-RSA_public_key"
 
-def deploy():
+def deploy(archive_path):
     """
     Executes the do_deploy function on remote servers
     """
