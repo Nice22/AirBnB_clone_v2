@@ -4,38 +4,38 @@ Fabric script to execute the do_deploy function
 """
 
 from fabric.api import *
+import os
 
 env.hosts = ["35.196.96.41", "3.234.218.189"]
 env.user = "ubuntu"
 env.key_filename = "/root/0-RSA_public_key"
 
-def deploy(archive_path):
+def do_deploy(archive_path):
     """
     Executes the do_deploy function on remote servers
     """
-    archive_path = local("./2-do_deploy_web_static.py")
-    if archive_path.failed:
-        print("Error generating archive. Aborting deployment.")
-        return
+    if not os.path.exists(archive_path):
+        print("Archive path does not exist. Aborting deployment.")
+        return False
 
-    result = run("python3 -c 'from datetime import datetime; print(datetime.now().strftime(\"%Y%m%d%H%M%S\"))'")
-    if result.failed:
-        print("Error running remote command. Aborting deployment.")
-        return
+    archive_filename = os.path.basename(archive_path)
+    archive_basename = os.path.splitext(archive_filename)[0]
 
-    remote_archive_path = "versions/web_static_{}.tgz".format(result)
-    put(archive_path, remote_archive_path)
+    remote_folder = "/data/web_static/releases/{}".format(archive_basename)
 
-    print("Deploying archive...")
-    with settings(warn_only=True):
-        if run("mkdir -p /tmp/web_static").succeeded:
-            if run("tar -xzf {} -C /tmp/web_static".format(remote_archive_path)).succeeded:
-                if run("mv /tmp/web_static/web_static/* /tmp/web_static").succeeded:
-                    if run("rm -rf /tmp/web_static/web_static").succeeded:
-                        if run("rm -rf /data/web_static/current").succeeded:
-                            if run("ln -s /tmp/web_static /data/web_static/current").succeeded:
-                                print("New version deployed!")
-                                return
+    put(archive_path, "/tmp/")
+    run("mkdir -p {}".format(remote_folder))
+    run("tar -xzf /tmp/{} -C {}/".format(archive_filename, remote_folder))
+    run("rm /tmp/{}".format(archive_filename))
+    run("mv {}/web_static/* {}".format(remote_folder, remote_folder))
+    run("rm -rf {}/web_static".format(remote_folder))
+    run("rm -rf /data/web_static/current")
+    run("ln -s {} /data/web_static/current".format(remote_folder))
 
-    print("Deployment failed.")
+    print("New version deployed!")
+    return True
+
+if __name__ == "__main__":
+    archive_path = "versions/web_static_20230822184500.tgz"  # Update with your actual archive path
+    do_deploy(archive_path)
 
