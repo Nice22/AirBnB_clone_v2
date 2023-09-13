@@ -8,6 +8,7 @@ from datetime import datetime
 import os
 
 def do_pack():
+
     """
     Creates a compressed archive of the web_static folder
     """
