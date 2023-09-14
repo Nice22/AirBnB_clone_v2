@@ -14,6 +14,11 @@ def do_pack():
     try:
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         archive_name = "versions/web_static_{}.tgz".format(timestamp)
+
+        # Ensure the "versions" directory exists
+        if not os.path.exists("versions"):
+            os.makedirs("versions")
+
         local("tar -czvf {} web_static".format(archive_name))
         return archive_name
     except:
