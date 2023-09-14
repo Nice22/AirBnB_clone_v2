@@ -21,6 +21,6 @@ def do_pack():
 
         local("tar -czvf {} web_static".format(archive_name))
         return archive_name
-    except:
+    except Exception:
         return None
 
