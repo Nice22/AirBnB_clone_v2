@@ -18,6 +18,10 @@ def do_deploy(archive_path):
         print("Archive path does not exist. Aborting deployment.")
         return False
 
+    """
+    Args:
+    """
+    
     archive_filename = os.path.basename(archive_path)
     archive_basename = os.path.splitext(archive_filename)[0]
 
@@ -33,9 +37,13 @@ def do_deploy(archive_path):
     run("sudo ln -s {} /data/web_static/current".format(remote_folder))
 
     print("New version deployed!")
+    
+    """
+    Returns:
+    """
+
     return True
 
 if __name__ == "__main__":
-    archive_path = "versions/web_static_20230822184500.tgz"  # Update with your actual archive path
-    do_deploy(archive_path)
-
+    archive_path = "versions/web_static_20230914071506.tgz"  # Update with your actual archive path
+    do_deploy(archive_pat)
