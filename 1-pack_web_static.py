@@ -7,6 +7,7 @@ from fabric.api import local
 from datetime import datetime
 import os
 
+
 def do_pack():
     """
     Creates a compressed archive of the web_static folder
@@ -23,4 +24,3 @@ def do_pack():
         return archive_name
     except Exception:
         return None
-
