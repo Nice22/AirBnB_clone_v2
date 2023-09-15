@@ -1,0 +1,1 @@
+/root/AirBnB_clone_v2/2-do_deploy_web_static.py
