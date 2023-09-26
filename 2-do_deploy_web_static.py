@@ -6,7 +6,7 @@ Fabric script to execute the do_deploy function
 from fabric.api import env, put, run  # Import put and run functions
 import os
 
-env.hosts = ["54.144.137.166", "54.237.14.236"]
+env.hosts = ["54.144.137.166", "54.159.22.227"]
 env.user = "ubuntu"
 env.key_filename = "/root/0-RSA_public_key"
 
