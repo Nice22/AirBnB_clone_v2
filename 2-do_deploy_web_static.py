@@ -34,7 +34,19 @@ def do_deploy(archive_path):
     run("sudo mkdir -p {}".format(remote_folder))
     run("sudo tar -xzf /tmp/{} -C {}/".format(archive_filename, remote_folder))
     run("sudo rm /tmp/{}".format(archive_filename))
-    run("sudo mv {}/web_static/* {}".format(remote_folder, remote_folder))
+
+    # Check if files and directories exist in remote_folder
+    result = run("sudo ls {}/web_static/".format(remote_folder))
+
+    if not result.succeeded:
+        print("Failed to list files and directories in remote_folder. Aborting deployment.")
+        return False
+
+    # Remove any existing files and directories in the target directory
+    run("sudo rm -rf {}/web_static/*".format(remote_folder))
+
+    # Explicitly specify the source directory for the mv command
+    run("sudo mv {}/web_static/* {}/".format(remote_folder, remote_folder))
     run("sudo rm -rf {}/web_static".format(remote_folder))
     run("sudo rm -rf /data/web_static/current")
     run("sudo ln -s {} /data/web_static/current".format(remote_folder))
