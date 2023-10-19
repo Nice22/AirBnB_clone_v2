@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Transfers a file
+#
+# Variables
+path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+filename="$(basename "${BASH_SOURCE}")"
+brown='\e[0;33m'
+reset='\033[0m'
+
+if [ $# -eq 2 ]; then
+    file="$1"
+    ip="$2"
+    user="ubuntu"
+    key="~/.ssh/0-RSA_public_key"
+
+    scp -i "$key" -o StrictHostKeyChecking=no "$path/$file" "$user@$ip:/home/$user/"
+else
+    echo -e "Usage: ${brown}${filename} PATH_TO_FILE IP${reset}"
+fi
+
